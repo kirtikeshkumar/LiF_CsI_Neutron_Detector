@@ -1,0 +1,3 @@
+/gun/particle neutron
+/gun/momentumAmp 1 MeV
+/run/beamOn 10000000
