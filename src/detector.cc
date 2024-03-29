@@ -2,30 +2,7 @@
 
 MySensitiveDetector::MySensitiveDetector(G4String name): 
 G4VSensitiveDetector(name)
-{
-	quEff = new G4PhysicsOrderedFreeVector();
-	
-	std::ifstream datafile;
-	datafile.open("eff.dat");
-	
-	while(1)
-	{
-	G4double wlen,queff;
-	
-	datafile >> wlen >> queff;
-	
-	if(datafile.eof())
-		break;
-		
-	G4cout << wlen << " " << queff <<G4endl;
-	
-	quEff->InsertValues(wlen,queff/100.);
-	}
-	
-	datafile.close();
-	
-	//quEff->SetSpline(false);
-}
+{}
 
 MySensitiveDetector::~MySensitiveDetector()
 {}
