@@ -11,7 +11,7 @@
 
 #include "construction.hh"
 #include "Shielding.hh"
-//#include "physics.hh"
+#include "physics.hh"
 #include "action.hh"
 #include <G4OpticalPhysics.hh>
 
@@ -25,11 +25,10 @@ int main(int argc,char** argv)
 //Initializing the detector construction, physics implementation and action initialization files	
 	runManager->SetUserInitialization(new MyDetectorConstruction());
 	//runManager->SetUserInitialization(new MyPhysicsList());
-	//runManager->SetUserInitialization(new Shielding);
-  	G4VModularPhysicsList *physicsList = new Shielding;
+	runManager->SetUserInitialization(new Shielding);
+  	//G4VModularPhysicsList *physicsList = new Shielding;
 	//G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
 	//physicsList->RegisterPhysics(opticalPhysics);
-	runManager->SetUserInitialization(physicsList);
 	//runManager->SetUserInitialization(physicsList);
 	runManager->SetUserInitialization(new MyActionInitialization());
 	runManager->Initialize();

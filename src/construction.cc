@@ -99,10 +99,10 @@ void MyDetectorConstruction::ConstructSetup()
 	
 	//Defining Logical Volumes
 	logicLiF	 = new G4LogicalVolume(solidLiF, LiF, "logicLiF");
-	logicScint 	 = new G4LogicalVolume(solidScint, CsI, "logicScint");
-	//logicScint 	 = new G4LogicalVolume(solidScint, CsI_Tl, "logicScint"); //if CsI(Tl) to be used
+	//logicScint 	 = new G4LogicalVolume(solidScint, CsI, "logicScint");
+	logicScint 	 = new G4LogicalVolume(solidScint, CsI_Tl, "logicScint"); //if CsI(Tl) to be used
 	
-	//G4LogicalSkinSurface *skin2 = new G4LogicalSkinSurface("skin", logicScint, mirrorSurface);
+	G4LogicalSkinSurface *skin = new G4LogicalSkinSurface("skin", logicScint, mirrorSurface);
 	
 	/*//Defining Physical positionings
 	 * Here the copynumber of each layer is as follows:
