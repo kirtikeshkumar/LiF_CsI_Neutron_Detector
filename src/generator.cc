@@ -21,8 +21,8 @@
     /*Getting the attributes of our particle(proton) from the G4ParticleTable using FindParticle function.*/
  	G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
  	//G4ParticleDefinition *particle = particleTable->FindParticle("geantino");
- 	G4ParticleDefinition *particle = particleTable->FindParticle("gamma");
- 	//G4ParticleDefinition *particle = particleTable->FindParticle("neutron");
+ 	//G4ParticleDefinition *particle = particleTable->FindParticle("gamma");
+ 	G4ParticleDefinition *particle = particleTable->FindParticle("neutron");
  	
  	/*Defining the position and momentum of the particle using G4ThreeVector to define and SetParticle function to define the properties*/
  	G4ThreeVector pos(x*cm, y*cm, z*cm);
@@ -31,7 +31,7 @@
  	fParticleGun->SetParticlePosition(pos);
  	fParticleGun->SetParticleMomentumDirection(mom);
  	//fParticleGun->SetParticleMomentum(0.0*MeV);
- 	fParticleGun->SetParticleEnergy(511*keV);
+ 	fParticleGun->SetParticleEnergy(0.025*eV);
  	fParticleGun->SetParticleDefinition(particle);
  	
  	

@@ -26,7 +26,7 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 	}*/
 	
 	G4int evID = anEvent->GetEventID();
-	G4AnalysisManager *man = G4AnalysisManager::Instance();
+	//G4AnalysisManager *man = G4AnalysisManager::Instance();
 	
 	if(num!=0){
 		G4cout << "Number of Particles in Event: "<< evID << " is "<< num << G4endl;

@@ -63,7 +63,7 @@ void MyDetectorConstruction::DefineMaterials()
 		0.9590, 0.9849, 0.9472, 0.8855, 0.8000, 0.7284, 0.6468, 0.5991, 
 		0.5632, 0.4737, 0.4001, 0.3544, 0.2748, 0.245 , 0.2013, 0.1695, 
 		0.1138, 0.0562, 0.0165};										//Intensity of emission at energies as given above
-	//G4double absorption[2] = {2.1*m,2.1*m};								//absorption length (needs value modification)
+	G4double absorption[2] = {28*cm,34*cm};								//absorption length (needs value modification)
 	G4MaterialPropertiesTable *mptCsITl = new G4MaterialPropertiesTable();
 	mptCsITl->AddProperty("RINDEX",energy, rindexCsI_Tl, 2);
 	mptCsITl->AddProperty("SCINTILLATIONCOMPONENT1", energy_spectrum, energy_fraction, 27);
@@ -71,15 +71,17 @@ void MyDetectorConstruction::DefineMaterials()
 	mptCsITl->AddConstProperty("RESOLUTIONSCALE", 1.0);					//stdDev in no. of photons = sqrt(SCINTILLATIONTEILD)*RESOLUTIONSCALE
 	mptCsITl->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 1000*ns);  //Primary Decay Time
 	mptCsITl->AddConstProperty("SCINTILLATIONYIELD1", 1.);				
-	//mptCsITl->AddProperty("ABSLENGTH", energy, absorption,2);
+	mptCsITl->AddProperty("ABSLENGTH", energy, absorption,2);
 	CsI_Tl->SetMaterialPropertiesTable(mptCsITl);
 	
 	
 	//Defining mirror surface 
 	mirrorSurface = new G4OpticalSurface("mirrorSurface");
 	mirrorSurface->SetType(dielectric_metal);
-	mirrorSurface->SetFinish(ground);
+	mirrorSurface->SetFinish(polished);
 	mirrorSurface->SetModel(unified);
+	energy[0] = 1.239841939*eV/0.9;
+	energy[1] = 1.239841939*eV/0.2;
 	G4double reflectivity[2] = {1.0, 1.0};
 	G4MaterialPropertiesTable *mptMirror = new G4MaterialPropertiesTable();
 	mptMirror->AddProperty("REFLECTIVITY", energy, reflectivity, 2);
@@ -102,7 +104,7 @@ void MyDetectorConstruction::ConstructSetup()
 	//logicScint 	 = new G4LogicalVolume(solidScint, CsI, "logicScint");
 	logicScint 	 = new G4LogicalVolume(solidScint, CsI_Tl, "logicScint"); //if CsI(Tl) to be used
 	
-	G4LogicalSkinSurface *skin = new G4LogicalSkinSurface("skin", logicScint, mirrorSurface);
+	//skin = new G4LogicalSkinSurface("skin", logicScint, mirrorSurface);
 	
 	/*//Defining Physical positionings
 	 * Here the copynumber of each layer is as follows:
