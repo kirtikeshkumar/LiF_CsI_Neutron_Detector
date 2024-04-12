@@ -4,37 +4,23 @@ MyRunAction::MyRunAction()
 {
 	G4AnalysisManager *man = G4AnalysisManager::Instance();
 	
-	/*man->CreateNtuple("Photons","Photons");
-	man->CreateNtupleIColumn("fEvent");
-	man->CreateNtupleDColumn("fX");
-	man->CreateNtupleDColumn("fY");
-	man->CreateNtupleDColumn("fZ");
-	man->CreateNtupleDColumn("fWlen");
-	man->FinishNtuple(0);*/
-	
-	/*man->CreateNtuple("LayersEdep","LayersEdep");
-	man->CreateNtupleIColumn("fEvent");
-	man->CreateNtupleDColumn("PS_Out");
-	man->CreateNtupleDColumn("HDPE_Out");
-	man->CreateNtupleDColumn("BP");
-	man->CreateNtupleDColumn("Pb");
-	man->CreateNtupleDColumn("HDPE_In");
-	man->CreateNtupleDColumn("PS_In");
-	man->CreateNtupleDColumn("Cu");
-	man->FinishNtuple(0);*/
-	
-	/*man->CreateNtuple("Hits","Hits");
-	man->CreateNtupleIColumn("fEvent");
-	man->CreateNtupleDColumn("fX");
-	man->CreateNtupleDColumn("fY");
-	man->CreateNtupleDColumn("fZ");
-	man->FinishNtuple(1);*/
-	
-	man->CreateNtuple("Scoring", "Scoring");
-	man->CreateNtupleDColumn("fEdep");
+	man->CreateNtuple("LiF","LiF");
+	man->CreateNtupleIColumn("fEvtNo");
+	man->CreateNtupleIColumn("fCopyNo");
+	man->CreateNtupleSColumn("fParticle");
+	man->CreateNtupleIColumn("fParentID");
+	man->CreateNtupleSColumn("fProdProcess");
+	man->CreateNtupleDColumn("fEnergyDep");
 	man->FinishNtuple(0);
 	
-	
+	man->CreateNtuple("CsI","CsI");
+	man->CreateNtupleIColumn("fEvtNo");
+	man->CreateNtupleIColumn("fCopyNo");	
+	man->CreateNtupleSColumn("fParticle");
+	man->CreateNtupleIColumn("fParentID");
+	man->CreateNtupleSColumn("fProdProcess");
+	man->CreateNtupleDColumn("fEnergyDep");
+	man->FinishNtuple(1);	
 }
 
 MyRunAction::~MyRunAction()
@@ -49,15 +35,15 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
 	std::stringstream strRunID;
 	strRunID << runID;
 	
-	man->OpenFile("output"+strRunID.str()+".root");
-	
-	
+	man->OpenFile("output"+strRunID.str()+".root");	
 	
 }
 
 void MyRunAction::EndOfRunAction(const G4Run*)
 {
 	G4AnalysisManager *man = G4AnalysisManager::Instance();
+	
+	G4cout<<"Run Finished"<<G4endl;
 	
 	man->Write();
 	man->CloseFile();

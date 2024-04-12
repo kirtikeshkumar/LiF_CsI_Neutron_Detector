@@ -19,8 +19,11 @@ public:
 	
 	void AddEdep(G4double edep){ fEdep += edep; }
 	void AddNum(G4int a){num+=a;}
+	G4int GetEvID(){return evID;}
 private:
+	MyRunAction* fRun;
 	G4double fEdep;
+	G4int evID;
 	G4int num;
 };
 

@@ -58,6 +58,7 @@ private:
 	G4double xWorld,yWorld,zWorld;
 	
 	G4OpticalSurface *mirrorSurface;
+	G4LogicalSkinSurface *skin;
 };
 
 #endif
