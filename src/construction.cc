@@ -95,7 +95,7 @@ void MyDetectorConstruction::ConstructSetup()
 	G4ThreeVector LiFSz 	= G4ThreeVector(0.1, 40., 40.);				//size of LiF layer
 	G4ThreeVector ScintSz 	= G4ThreeVector(3.0, 40., 40.);				//size of Scintillator Layer
 	
-	//Creating Layers as G$Box
+	//Creating Layers as G4Box
 	solidLiF	 = new G4Box("LiF", 0.5*LiFSz.x()*mm, 0.5*LiFSz.y()*mm, 0.5*LiFSz.z()*mm);
 	solidScint	 = new G4Box("Scint", 0.5*ScintSz.x()*mm, 0.5*ScintSz.y()*mm, 0.5*ScintSz.z()*mm);
 	

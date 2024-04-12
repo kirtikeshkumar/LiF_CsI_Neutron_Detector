@@ -11,7 +11,7 @@ MySteppingAction::~MySteppingAction()
 void MySteppingAction::UserSteppingAction(const G4Step *step)
 {
 	G4AnalysisManager *man = G4AnalysisManager::Instance();
-	G4int copyNo = step->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber();
+	G4int copyNo = step->GetPostStepPoint()->GetTouchableHandle()->GetCopyNumber();
 	
 	G4int evID = fEventAction->GetEvID();
 	
