@@ -13,8 +13,6 @@
 #include "Shielding.hh"
 #include "physics.hh"
 #include "action.hh"
-#include <G4OpticalPhysics.hh>
-#include "G4HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4PhysListFactory.hh"
 
 /*The main function where all the objects are initialized and all the commands needed are performed*/
@@ -28,18 +26,21 @@ int main(int argc,char** argv)
 	runManager->SetUserInitialization(new MyDetectorConstruction());
 	
 	//Physics Lists
-	//runManager->SetUserInitialization(new MyPhysicsList());
+	runManager->SetUserInitialization(new MyPhysicsList());
 	//runManager->SetUserInitialization(new Shielding);
-  	/*G4VModularPhysicsList *physicsList = new Shielding;
+  	/*
+  	G4VModularPhysicsList *physicsList = new Shielding;
 	G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
 	physicsList->RegisterPhysics(opticalPhysics);
-	runManager->SetUserInitialization(physicsList);*/
+	runManager->SetUserInitialization(physicsList);
+	*/
+	/*
 	G4PhysListFactory factory;
 	G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("QGSP_BIC_HP");
 	G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
 	//physicsList->RegisterPhysics(opticalPhysics);
 	runManager->SetUserInitialization(physicsList);
-	
+	*/
 	runManager->SetUserInitialization(new MyActionInitialization());
 	runManager->Initialize();
 	

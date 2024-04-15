@@ -10,7 +10,15 @@
 #include "G4RadioactiveDecayPhysics.hh"
 #include "FTFP_BERT.hh"
 #include "G4StepLimiterPhysics.hh"
-#include "Shielding.hh"
+#include "G4HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4HadronPhysicsQGSP_BIC.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4StoppingPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysicsHP.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+#include "G4NeutronTrackingCut.hh"
+
 
 class MyPhysicsList : public G4VModularPhysicsList
 {

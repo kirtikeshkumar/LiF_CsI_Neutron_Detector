@@ -98,7 +98,7 @@ if(data_array):
             particles.append(data[2])
         if data[2] == 'triton' and data[4] not in processes:
             processes.append(data[4])
-        if(data[2] == 'alpha' and data[1]%2 == 1 and data[1] != 100 and data[4] == 'neutronInelastic'):
+        if(data[2] == 'alpha' and data[3] == 1 and data[1] == 5 and data[4] == 'neutronInelastic'):
             #print(data)
             if(currevt == ongoingevtal):
                 edepevtal += data[5]
@@ -107,15 +107,18 @@ if(data_array):
                 edepevtal = data[5]
                 ongoingevtal = currevt
         
-        if(data[2] == 'triton' and data[4] == 'neutronInelastic'):
-            #print(data)
+        if(data[2] == 'triton' and data[3] == 1 and data[1] == 5 and data[4] == 'neutronInelastic'):
+            ##print(data)
             if(currevt == ongoingevttr):
+                ##print(data)
                 edepevttr += data[5]
             else:
                 EDepTrit.append(edepevttr)
                 edepevttr = data[5]
                 ongoingevttr = currevt
     
+print("Triton",len(EDepTrit))
+print("Alpha",len(EDepAlpha))
 
 # Start an interactive interpreter session with access to local variables
 code.interact(local=locals())

@@ -1,0 +1,10 @@
+/gps/particle geantino
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/centre 2. 1. 0. cm
+/gps/pos/radius 3. cm
+/gps/ang/type cos
+/gps/ene/type Exp
+/gps/ene/min 2. MeV
+/gps/ene/max 10. MeV
+/gps/ene/ezero 2.
