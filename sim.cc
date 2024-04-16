@@ -31,7 +31,7 @@ int main(int argc,char** argv)
   	/*
   	G4VModularPhysicsList *physicsList = new Shielding;
 	G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
-	physicsList->RegisterPhysics(opticalPhysics);
+	//physicsList->RegisterPhysics(opticalPhysics);
 	runManager->SetUserInitialization(physicsList);
 	*/
 	/*

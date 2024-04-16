@@ -34,13 +34,23 @@ void MyDetectorConstruction::DefineMaterials()
 	worldMat->SetMaterialPropertiesTable(mptWorld);
 	
 	//Lithium Fluoride
-	LiF = nist->FindOrBuildMaterial("G4_LITHIUM_FLUORIDE");
+	G4double fractionmass, abundance, a;
+	G4String name, symbol;
+	G4int iz, n, ncomponents;
+	LiF = new G4Material("LiF", 2.64*g/cm3, 2);
+	G4Isotope* Li6 = new G4Isotope(name="Li6", iz=3, n=6, a=6.01512289*g/mole);
+	G4Isotope* Li7 = new G4Isotope(name="Li7", iz=3, n=7, a=7.01600343*g/mole);
+	G4Element* elLi  = new G4Element(name="Lithium", symbol="Li", ncomponents=2);
+	elLi->AddIsotope(Li6, abundance = 7.5*perCent);
+	elLi->AddIsotope(Li7, abundance = 92.5*perCent);
+	LiF->AddElement(nist->FindOrBuildElement("F"), fractionmass = 73.243*perCent);
+	LiF->AddElement(elLi, fractionmass = 26.757*perCent);
+	//LiF = nist->FindOrBuildMaterial("G4_LITHIUM_FLUORIDE");
 	
 	//Cesium Iodide (no doping)
 	CsI = nist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
 	
 	//Cesium Iodide (Tl doped) (doping conc. 0.355%wt from doi:10.1088/1742-6596/1144/1/012105)
-	G4double fractionmass;
 	G4double TlDopantMassFraction = 0.355; 								//modify the dopant mass fraction here
 	G4double CsIDopantMassFraction = 1.0-TlDopantMassFraction;
 	CsI_Tl = new G4Material("CsI_Tl", 4.51*g/cm3, 2); 

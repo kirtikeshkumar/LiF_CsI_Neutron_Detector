@@ -4,23 +4,24 @@ MyRunAction::MyRunAction()
 {
 	G4AnalysisManager *man = G4AnalysisManager::Instance();
 	
-	man->CreateNtuple("LiF","LiF");
+	man->CreateNtuple("E Deposition","E Deposition");
 	man->CreateNtupleIColumn("fEvtNo");
 	man->CreateNtupleIColumn("fCopyNo");
+	man->CreateNtupleSColumn("fMaterial");
 	man->CreateNtupleSColumn("fParticle");
 	man->CreateNtupleIColumn("fParentID");
 	man->CreateNtupleSColumn("fProdProcess");
 	man->CreateNtupleDColumn("fEnergyDep");
 	man->FinishNtuple(0);
 	
-	man->CreateNtuple("CsI","CsI");
-	man->CreateNtupleIColumn("fEvtNo");
-	man->CreateNtupleIColumn("fCopyNo");	
-	man->CreateNtupleSColumn("fParticle");
-	man->CreateNtupleIColumn("fParentID");
-	man->CreateNtupleSColumn("fProdProcess");
-	man->CreateNtupleDColumn("fEnergyDep");
-	man->FinishNtuple(1);	
+	//man->CreateNtuple("CsI","CsI");
+	//man->CreateNtupleIColumn("fEvtNo");
+	//man->CreateNtupleIColumn("fCopyNo");	
+	//man->CreateNtupleSColumn("fParticle");
+	//man->CreateNtupleIColumn("fParentID");
+	//man->CreateNtupleSColumn("fProdProcess");
+	//man->CreateNtupleDColumn("fEnergyDep");
+	//man->FinishNtuple(1);	
 }
 
 MyRunAction::~MyRunAction()

@@ -11,8 +11,8 @@
  	
  	G4double pi		= 4.0*atan(1.0);
  	G4double R 		= 40;												//in cm
- 	G4double Theta 	= 45.0 * (pi/180.0);
- 	G4double Phi	= 45.0 * (pi/180.0);
+ 	G4double Theta 	= 90.0 * (pi/180.0);
+ 	G4double Phi	= 0.0 * (pi/180.0);
  	
  	G4double x = R * sin(Theta) * cos(Phi);
  	G4double y = R * sin(Theta) * sin(Phi);

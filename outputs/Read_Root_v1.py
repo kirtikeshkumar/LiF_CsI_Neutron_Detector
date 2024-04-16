@@ -17,22 +17,26 @@ def read_tree(tree):
 
         # Create a dictionary to map branch indices to their names
         branchIndex_map = {}
+        branchIndx_map = {}
         for i, branch in enumerate(branches):
             branch_name = branch.GetName()
-            branchIndex_map[i] = branch_name
+            branchIndex_map[branch_name] = i
+            branchIndx_map[i] = branch_name
 
         # Create an empty NumPy array to store the data
         data_array = []
 
         # Loop through each event in the tree
         for i, event in enumerate(tree):
+            if(i%100000 == 0):
+                print(f"Read Entry {i}")
             data_array.append([])
             # Loop through each branch in the tree
             for j in range(numBranches):
                 # Get the value of the branch for the current event and store it in the data array
-                data_array[i].append(getattr(event, f"{branchIndex_map[j]}"))
+                data_array[i].append(getattr(event, f"{branchIndx_map[j]}"))
         
-        return branchIndex_map, data_array, numEntries
+        return branchIndx_map, branchIndex_map, data_array, numEntries
     else:
         # If the tree is not loaded, return None
         print("Check the Tree name")
@@ -56,9 +60,9 @@ def read_file(fname):
 
         # Check if the object is a TTree
         if isinstance(obj, ROOT.TTree):
-            fTree_name = key.GetName()                                      # Get the TTree name
-            branchIndex_map, data_array, numEntries = read_tree(obj)        # Read the TTree
-            fTrees[fTree_name] = (numEntries, branchIndex_map, data_array)  # Store the output in a dictionary
+            fTree_name = key.GetName()                                                      # Get the TTree name
+            branchIndx_map, branchIndex_map, data_array, numEntries = read_tree(obj)        # Read the TTree
+            fTrees[fTree_name] = (numEntries, branchIndx_map, branchIndex_map, data_array)                  # Store the output in a dictionary
 
     return fTrees
 
@@ -71,54 +75,94 @@ numParticleInSensVol = []
 
 ##currEnergy = minEnergy
 ##while(currEnergy <= maxEnergy):                                             # Loop over the energies
+##fname = "output_SheildingPhysics.root"
+##fname = "output_QGSP.root"
+##fname = "output_MyPhysicsList.root"
 fname = "output0.root"
 fTrees = read_file(fname)
-data_array = {}
+data_array = []
+branchMap = {}
+branches = {}
 if(fTrees):
     keys = list(fTrees.keys())                                          # Get the list of Tree names in the file
     if(keys):                                                           # If no particles traverse then no tree is created. Hence checking if the trees exist    
         for key in keys:                                                # Read the number of particles transmitting to sensitive volume
             if(fTrees[key][0]):
-                data_array[key] = fTrees[key][2]
+                data_array = fTrees[key][3]
+                branchMap = fTrees[key][2]
+                branches = fTrees[key][1]
 
-EDepAlpha = []
-EDepTrit = []
+EDepAlpha = np.array([])
+EDepTrit = np.array([])
+EDepNet = np.array([])
 particles = []
 processes = []
+evtAl = []
+evtTr = []
+
 if(data_array):
-    keys = list(data_array.keys())
-    key = 'LiF'
+    fEvtCol = branchMap['fEvtNo']
+    fCopyCol = branchMap['fCopyNo']
+    fMatCol = branchMap['fMaterial']
+    fPartCol = branchMap['fParticle']
+    fParentCol = branchMap['fParentID']
+    fProcCol = branchMap['fProdProcess']
+    fEDepCol = branchMap['fEnergyDep']
     ongoingevtal = 0
+    ongoingevtnet = 0
     ongoingevttr = 0
     edepevtal = 0.0
     edepevttr = 0.0
-    for i,data in enumerate(data_array[key]):
-        currevt = data[0]
-        if data[2] not in particles:
-            particles.append(data[2])
-        if data[2] == 'triton' and data[4] not in processes:
-            processes.append(data[4])
-        if(data[2] == 'alpha' and data[3] == 1 and data[1] == 5 and data[4] == 'neutronInelastic'):
+    edepevtnet = 0.0
+    for i,data in enumerate(data_array):
+        if(i%100000 == 0):
+            print(f"Analysed Entry {i}")
+            print(f"Number of Events Analysed: {data[fEvtCol]}")
+            print(f"Num of Alpha Events: {len(EDepAlpha)}")
+            print(f"Num of Triton Events: {len(EDepTrit)}")
+        currevtal = data[fEvtCol]
+        currevttr = data[fEvtCol]
+        currevtnet = data[fEvtCol]
+        if data[fPartCol] not in particles:
+            particles.append(data[fPartCol])
+
+        if(data[fPartCol] == 'alpha' and data[fProcCol] == 'neutronInelastic'):
             #print(data)
-            if(currevt == ongoingevtal):
-                edepevtal += data[5]
+##            if currevtal not in evtAl:
+##                evtAl.append(currevtal)
+            if(currevtal == ongoingevtal):
+                edepevtal += data[fEDepCol]
             else:
-                EDepAlpha.append(edepevtal)
-                edepevtal = data[5]
-                ongoingevtal = currevt
+                EDepAlpha = np.append(EDepAlpha,edepevtal)
+                edepevtal = data[fEDepCol]
+                ongoingevtal = currevtal
         
-        if(data[2] == 'triton' and data[3] == 1 and data[1] == 5 and data[4] == 'neutronInelastic'):
+        if(data[fPartCol] == 'triton' and data[fProcCol] == 'neutronInelastic'):
             ##print(data)
-            if(currevt == ongoingevttr):
+##            if currevttr not in evtTr:
+##                evtTr.append(currevttr)
+            if(currevttr == ongoingevttr):
                 ##print(data)
-                edepevttr += data[5]
+                edepevttr += data[fEDepCol]
             else:
-                EDepTrit.append(edepevttr)
-                edepevttr = data[5]
-                ongoingevttr = currevt
-    
+                EDepTrit = np.append(EDepTrit,edepevttr)
+                edepevttr = data[fEDepCol]
+                ongoingevttr = currevttr
+
+        if(data[fPartCol] == 'alpha' or data[fPartCol] == 'triton' and data[fProcCol] == 'neutronInelastic'):
+            #print(data)
+##            if currevtal not in evtAl:
+##                evtAl.append(currevtal)
+            if(currevtnet == ongoingevtnet):
+                edepevtnet += data[fEDepCol]
+            else:
+                EDepNet = np.append(EDepNet,edepevtnet)
+                edepevtnet = data[fEDepCol]
+                ongoingevtnet = currevtnet
+##    
 print("Triton",len(EDepTrit))
 print("Alpha",len(EDepAlpha))
+print("Alpha",len(EDepNet))
 
 # Start an interactive interpreter session with access to local variables
 code.interact(local=locals())
