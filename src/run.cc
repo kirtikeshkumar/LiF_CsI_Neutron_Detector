@@ -12,6 +12,9 @@ MyRunAction::MyRunAction()
 	man->CreateNtupleIColumn("fParentID");
 	man->CreateNtupleSColumn("fProdProcess");
 	man->CreateNtupleDColumn("fEnergyDep");
+	man->CreateNtupleDColumn("fTStamp");
+	man->CreateNtupleDColumn("fStepSize");
+	man->CreateNtupleDColumn("fDisplacement");
 	man->FinishNtuple(0);
 	
 	//man->CreateNtuple("CsI","CsI");
