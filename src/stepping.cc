@@ -30,13 +30,13 @@ void MySteppingAction::UserSteppingAction(const G4Step *step)
 	
 	G4double edep = step->GetTotalEnergyDeposit();
 	
-	G4double particleTime = (step->GetPostStepPoint()->GetGlobalTime())/ns;
+	G4double particleTime = (step->GetPostStepPoint()->GetGlobalTime())/ms;
 	
 	G4ThreeVector PreStepPos = step->GetPreStepPoint()->GetPosition();
 	G4ThreeVector PostStepPos = step->GetPostStepPoint()->GetPosition();
-	G4double StepDistance = ((PreStepPos-PostStepPos).mag())/mm;
+	G4double StepDistance = ((PreStepPos-PostStepPos).mag())/um;
 	G4ThreeVector creationPos = step->GetTrack()->GetVertexPosition();
-	G4double netDisplacement = ((PostStepPos-creationPos).mag())/mm;
+	G4double netDisplacement = ((PostStepPos-creationPos).mag())/um;
 	
 	if(edep >= 0.00025*eV and copyNo >= 0){
 		if(step->GetPostStepPoint()->GetPhysicalVolume()){

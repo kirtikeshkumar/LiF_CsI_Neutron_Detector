@@ -62,7 +62,7 @@ def read_file(fname):
         if isinstance(obj, ROOT.TTree):
             fTree_name = key.GetName()                                                      # Get the TTree name
             branchIndx_map, branchIndex_map, data_array, numEntries = read_tree(obj)        # Read the TTree
-            fTrees[fTree_name] = (numEntries, branchIndx_map, branchIndex_map, data_array)                  # Store the output in a dictionary
+            fTrees[fTree_name] = (numEntries, branchIndx_map, branchIndex_map, data_array)  # Store the output in a dictionary
 
     return fTrees
 
@@ -92,8 +92,14 @@ if(fTrees):
                 branchMap = fTrees[key][2]
                 branches = fTrees[key][1]
 
+EvtAl = {}
+EvtTr = {}
 EDepAlpha = np.array([])
 EDepTrit = np.array([])
+DistAlpha = np.array([])
+DistTrit = np.array([])
+DispAlpha = np.array([])
+DispTrit = np.array([])
 EDepNet = np.array([])
 particles = []
 processes = []
@@ -108,12 +114,24 @@ if(data_array):
     fParentCol = branchMap['fParentID']
     fProcCol = branchMap['fProdProcess']
     fEDepCol = branchMap['fEnergyDep']
+    fTimeCol = branchMap['fTStamp']
+    fStepSzCol = branchMap['fStepSize']
+    fPartDispCol = branchMap['fDisplacement']
     ongoingevtal = 0
     ongoingevtnet = 0
     ongoingevttr = 0
     edepevtal = 0.0
     edepevttr = 0.0
     edepevtnet = 0.0
+    distevtal = 0.0
+    distevttr = 0.0
+    dispal = 0.0
+    disptr = 0.0
+    CsIEntranceTimeAl = 0.0
+    CsIEntranceTimeTr = 0.0
+    volAl = []
+    volTr = []
+    
     for i,data in enumerate(data_array):
         if(i%100000 == 0):
             print(f"Analysed Entry {i}")
@@ -132,37 +150,92 @@ if(data_array):
 ##                evtAl.append(currevtal)
             if(currevtal == ongoingevtal):
                 edepevtal += data[fEDepCol]
+                distevtal += data[fStepSzCol]
+                dispal = data[fPartDispCol]
+                if data[fCopyCol] not in volAl:
+                    volAl.append(data[fCopyCol])
+                if data[fCopyCol] % 2 == 0 and data[fCopyCol] != 100:
+                    CsIEntranceTimeAl = data[fTimeCol]
+                else:
+                    CsIEntranceTimeAl = -1.0
             else:
+                ##Store the data from past event
                 EDepAlpha = np.append(EDepAlpha,edepevtal)
-                edepevtal = data[fEDepCol]
+                DispAlpha = np.append(DispAlpha,dispal)
+                DistAlpha = np.append(DistAlpha,distevtal)
+                EvtAl[ongoingevtal] = (edepevtal,volAl,CsIEntranceTimeAl,distevtal,dispal)
+                #initialise for new event
                 ongoingevtal = currevtal
-        
+                dispal = data[fPartDispCol]
+                edepevtal = data[fEDepCol]
+                distevtal = data[fStepSzCol]
+                volAl = [data[fCopyCol]]
+                if data[fCopyCol] % 2 == 0 and data[fCopyCol] != 100:
+                    CsIEntranceTimeAl = data[fTimeCol]
+                else:
+                    CsIEntranceTimeAl = -1.0
+                
         if(data[fPartCol] == 'triton' and data[fProcCol] == 'neutronInelastic'):
             ##print(data)
 ##            if currevttr not in evtTr:
 ##                evtTr.append(currevttr)
             if(currevttr == ongoingevttr):
-                ##print(data)
                 edepevttr += data[fEDepCol]
+                distevttr += data[fStepSzCol]
+                disptr = data[fPartDispCol]
+                if data[fCopyCol] not in volTr:
+                    volTr.append(data[fCopyCol])
+                if data[fCopyCol] % 2 == 0 and data[fCopyCol] != 100:
+                    CsIEntranceTimeTr = data[fTimeCol]
+                else:
+                    CsIEntranceTimeTr = -1.0
             else:
+                ##Store the data from past event
                 EDepTrit = np.append(EDepTrit,edepevttr)
-                edepevttr = data[fEDepCol]
+                DispTrit = np.append(DispTrit,disptr)
+                DistTrit = np.append(DistTrit,distevttr)
+                EvtTr[ongoingevttr] = (edepevttr,volTr,CsIEntranceTimeTr,distevttr,disptr)
+                #initialise for new event
                 ongoingevttr = currevttr
+                disptr = data[fPartDispCol]
+                edepevttr = data[fEDepCol]
+                distevttr = data[fStepSzCol]
+                volTr = [data[fCopyCol]]
+                if data[fCopyCol] % 2 == 0 and data[fCopyCol] != 100:
+                    CsIEntranceTimeTr = data[fTimeCol]
+                else:
+                    CsIEntranceTimeTr = -1.0
 
-        if(data[fPartCol] == 'alpha' or data[fPartCol] == 'triton' and data[fProcCol] == 'neutronInelastic'):
-            #print(data)
-##            if currevtal not in evtAl:
-##                evtAl.append(currevtal)
-            if(currevtnet == ongoingevtnet):
-                edepevtnet += data[fEDepCol]
-            else:
-                EDepNet = np.append(EDepNet,edepevtnet)
-                edepevtnet = data[fEDepCol]
-                ongoingevtnet = currevtnet
+##        if(data[fPartCol] == 'alpha' or data[fPartCol] == 'triton' and data[fProcCol] == 'neutronInelastic'):
+##            #print(data)
+####            if currevtal not in evtAl:
+####                evtAl.append(currevtal)
+##            if(currevtnet == ongoingevtnet):
+##                edepevtnet += data[fEDepCol]
+##            else:
+##                EDepNet = np.append(EDepNet,edepevtnet)
+##                edepevtnet = data[fEDepCol]
+##                ongoingevtnet = currevtnet
 ##    
 print("Triton",len(EDepTrit))
 print("Alpha",len(EDepAlpha))
 print("Alpha",len(EDepNet))
+
+if EvtAl.keys()==EvtTr.keys():
+    cnt=0
+    with open('AnalysisResults.txt', 'w') as file:
+        file.write("Event \t\t Particle \t\t EDep(MeV) \t\t Volumes \t\t TStamp_CsI(ms) \t\t Distance(um) \t\t Displacement(um) \n")
+        for key, value in EvtAl.items():
+            if(value[2]>=0 or EvtTr[key][2]>=0):
+                print(key, 'alpha', value)
+                print(key, 'trit', EvtTr[key])
+                cnt = cnt+1
+            formatted_values_al = [f"{val:.8f}" if isinstance(val, float) else val for val in value]
+            formatted_values_tr = [f"{val:.8f}" if isinstance(val, float) else val for val in EvtTr[key]]
+            file.write(f"{key}\t\t Alpha \t\t{formatted_values_al[0]}\t\t{formatted_values_al[1]}\t\t{formatted_values_al[2]}\t\t{formatted_values_al[3]}\t\t{formatted_values_al[4]}\n")
+            file.write(f"{key}\t\t Triton \t\t{formatted_values_tr[0]}\t\t{formatted_values_tr[1]}\t\t{formatted_values_tr[2]}\t\t{formatted_values_tr[3]}\t\t{formatted_values_tr[4]}\n")
+            
+    
 
 # Start an interactive interpreter session with access to local variables
 code.interact(local=locals())
