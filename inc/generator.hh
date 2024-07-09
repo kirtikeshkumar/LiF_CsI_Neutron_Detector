@@ -22,7 +22,7 @@ public:
 
 /*GeneratePrimaries function to generate the particle we desire*/
 	virtual void GeneratePrimaries(G4Event*);
-	
+	G4double MaxwellEDist(G4double E);
 private:
 	G4ParticleGun *fParticleGun;
 };

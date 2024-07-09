@@ -37,7 +37,8 @@ void MyDetectorConstruction::DefineMaterials()
 	G4double fractionmass, abundance, a;
 	G4String name, symbol;
 	G4int iz, n, ncomponents;
-	LiF = new G4Material("LiF", 2.64*g/cm3, 2);
+	//LiF = new G4Material("LiF", 2.64*g/cm3, 2);
+	LiF = new G4Material("LiF", 1.0*g/cm3, 2);
 	G4Isotope* Li6 = new G4Isotope(name="Li6", iz=3, n=6, a=6.01512289*g/mole);
 	G4Isotope* Li7 = new G4Isotope(name="Li7", iz=3, n=7, a=7.01600343*g/mole);
 	G4Element* elLi  = new G4Element(name="Lithium", symbol="Li", ncomponents=2);
@@ -102,7 +103,7 @@ void MyDetectorConstruction::DefineMaterials()
 void MyDetectorConstruction::ConstructSetup()
 {	
 	//define the size of each component
-	G4ThreeVector LiFSz 	= G4ThreeVector(0.1, 40., 40.);				//size of LiF layer
+	G4ThreeVector LiFSz 	= G4ThreeVector(0.05, 40., 40.);				//size of LiF layer
 	G4ThreeVector ScintSz 	= G4ThreeVector(3.0, 40., 40.);				//size of Scintillator Layer
 	
 	//Creating Layers as G4Box

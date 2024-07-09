@@ -38,7 +38,7 @@ void MySteppingAction::UserSteppingAction(const G4Step *step)
 	G4ThreeVector creationPos = step->GetTrack()->GetVertexPosition();
 	G4double netDisplacement = ((PostStepPos-creationPos).mag())/um;
 	
-	if(edep >= 0.00025*eV and copyNo >= 0){
+	if(edep >= 10.0*keV and copyNo >= 0){
 		if(step->GetPostStepPoint()->GetPhysicalVolume()){
 			VolumeName = step->GetPostStepPoint()->GetPhysicalVolume()->GetName();
 		}else{VolumeName = "physBoundary";}
